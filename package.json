@@ -1,17 +1,17 @@
 {
-  "name": "vue-argon-dashboard-2",
+  "name": "HengY1Service",
   "version": "3.0.0",
   "private": true,
-  "author": "Creative Tim",
+  "author": "HengY1",
   "license": "SEE LICENSE IN <https://www.creative-tim.com/license>",
-  "description": "VueJS version of Argon Dashboard 2 by Creative Tim",
-  "homepage": "https://demos.creative-tim.com/vue-argon-dashboard/",
+  "description": "单打独斗，只产更优",
+  "homepage": "https://www.hengy1.top/",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/vue-argon-dashboard/issues"
+    "url": "https://github.com/HengY1Sky/Jnu_IBSWater"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/vue-argon-dashboard.git"
+    "url": "git+https://github.com/HengY1Sky/Jnu_IBSWater.git"
   },
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -20,14 +20,18 @@
   },
   "dependencies": {
     "@popperjs/core": "2.10.2",
+    "axios": "^0.27.2",
     "bootstrap": "5.1.3",
     "chart.js": "3.6.0",
     "core-js": "3.6.5",
     "dropzone": "6.0.0-beta.1",
+    "echarts": "^5.3.3",
     "quill": "1.3.6",
+    "sweetalert2": "^11.4.24",
     "vue": "3.2.0",
     "vue-flatpickr-component": "9.0.5",
     "vue-router": "4.0.14",
+    "vue3-eventbus": "^2.0.0",
     "vuex": "4.0.2"
   },
   "devDependencies": {
@@ -41,8 +45,11 @@
     "eslint": "6.7.2",
     "eslint-plugin-prettier": "3.3.1",
     "eslint-plugin-vue": "7.0.0",
+    "load": "^1.0.2",
     "prettier": "2.2.1",
     "sass": "1.43.3",
-    "sass-loader": "10.1.1"
+    "sass-loader": "10.1.1",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.10.0"
   }
 }

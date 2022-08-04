@@ -26,7 +26,7 @@
             <router-link
               class="nav-link d-flex align-items-center me-3 active"
               aria-current="page"
-              to="/"
+              to="/home"
             >
               <i
                 class="fa fa-home opacity-6 me-1 text-dark"
@@ -38,7 +38,7 @@
           <li class="nav-item">
             <router-link
                 class="nav-link d-flex align-items-center me-3 active"
-                to="/"
+                to="/search"
             >
               <i
                   class="fa fa-chart-pie opacity-6 me-1 text-dark"
@@ -50,7 +50,7 @@
           <li class="nav-item">
             <router-link
                 class="nav-link d-flex align-items-center me-3 active"
-                to="/"
+                to="/sms"
             >
               <i
                   class="fa fa-commenting opacity-6 me-1 text-dark"
@@ -63,10 +63,10 @@
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item">
             <a
-              href="https://www.hengy1.top/"
+              href="https://trk2yzbpzr.feishu.cn/docx/doxcnpVCZcMARLBw914fmYGpLAg"
               class="btn btn-sm mb-0 me-1"
               :class="isBtn"
-              >前往博客</a
+              >开放文档</a
             >
           </li>
         </ul>

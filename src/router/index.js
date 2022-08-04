@@ -1,17 +1,31 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Signin from "../views/Signin.vue";
 
 const routes = [
   {
     path: "/",
     name: "/",
-    redirect: "/signin",
+    redirect: "/home",
   },
   {
-    path: "/signin",
-    name: "Signin",
-    component: Signin,
+    path: "/home",
+    name: "home",
+    component: () => import('../views/Home'),
   },
+  {
+    path: "/search",
+    name: "search",
+    component: () => import('../views/Search'),
+  },
+  {
+    path: "/sms",
+    name: "sms",
+    component: () => import('../views/Sms'),
+  },
+  {
+    path: "/:catchAll(.*)",
+    name: "404",
+    component: () => import('../views/Home'),
+  }
 ];
 
 const router = createRouter({
