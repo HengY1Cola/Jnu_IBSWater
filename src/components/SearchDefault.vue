@@ -53,6 +53,9 @@ export default {
   },
   mounted() {
     this.initEcharts()
+  },
+  beforeUnmount() {
+    document.getElementById('chart').removeAttribute('_echarts_instance_');
   }
 }
 </script>

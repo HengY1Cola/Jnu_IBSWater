@@ -164,6 +164,9 @@ export default {
     window.onresize = function() {
       myChart.resize();
     };
+  },
+  beforeUnmount() {
+    document.getElementById('chart').removeAttribute('_echarts_instance_');
   }
 }
 </script>

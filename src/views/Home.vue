@@ -136,11 +136,12 @@ export default {
   },
   mounted() {
     this.getBaseInfo()
-    Swal.fire(
-        '电脑端可获得更好体验',
-        '',
-        'info'
-    )
+    Swal.fire({
+      icon: 'info',
+      title: '在线充值',
+      text: '官方已经提供在线充值渠道',
+      footer: '<a href="https://pay.jnu.edu.cn/jnushouyintai/pyxssssdf/pay">👉 点击在线充值</a>'
+    })
   }
 };
 </script>
