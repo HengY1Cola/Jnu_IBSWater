@@ -154,9 +154,15 @@ export default {
       useDirtyRect: false
     });
     // 处理三者数据
-    this.option.series[0].data = this.recordValue.Electric.electricInfo
-    this.option.series[1].data = this.recordValue.ColdWater.coldWaterInfo
-    this.option.series[2].data = this.recordValue.HotWater.hotWaterInfo
+    this.option.series[0].data = this.recordValue.Electric.electricInfo.map(function (value) {
+      return value.toFixed(2)
+    })
+    this.option.series[1].data = this.recordValue.ColdWater.coldWaterInfo.map(function (value) {
+      return value.toFixed(2)
+    })
+    this.option.series[2].data = this.recordValue.HotWater.hotWaterInfo.map(function (value) {
+      return value.toFixed(2)
+    })
     this.option.series[0].data.reverse()
     this.option.series[1].data.reverse()
     this.option.series[2].data.reverse()
