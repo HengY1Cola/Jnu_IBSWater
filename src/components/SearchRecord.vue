@@ -148,7 +148,7 @@ export default {
   mounted() {
     // 处理x轴
     let betweenDate = this.recordValue.Electric.electricDate.length > this.recordValue.ColdWater.coldWaterDate.length ? this.recordValue.Electric.electricDate : this.recordValue.ColdWater.coldWaterDate
-    this.option.xAxis[0].data = (betweenDate.length > this.recordValue.HotWater.hotWaterDate.length ? betweenDate : this.recordValue.HotWater.hotWaterDate).reverse()
+    this.option.xAxis[0].data = betweenDate.length > this.recordValue.HotWater.hotWaterDate.length ? betweenDate : this.recordValue.HotWater.hotWaterDate
     const myChart = echarts.init(document.getElementById('chart'), null, {
       renderer: 'canvas',
       useDirtyRect: false
@@ -166,9 +166,6 @@ export default {
     this.option.series[0].data ??= Array(this.option.xAxis[0].data.length).fill(0)
     this.option.series[1].data ??= Array(this.option.xAxis[0].data.length).fill(0)
     this.option.series[2].data ??= Array(this.option.xAxis[0].data.length).fill(0)
-    this.option.series[0].data.reverse()
-    this.option.series[1].data.reverse()
-    this.option.series[2].data.reverse()
     myChart.setOption(this.option);
     window.onresize = function() {
       myChart.resize();
