@@ -147,25 +147,25 @@ export default {
   },
   mounted() {
     // 处理x轴
-    let betweenDate = this.recordValue.Electric.electricDate.length > this.recordValue.ColdWater.coldWaterDate.length ? this.recordValue.Electric.electricDate : this.recordValue.ColdWater.coldWaterDate
-    this.option.xAxis[0].data = betweenDate.length > this.recordValue.HotWater.hotWaterDate.length ? betweenDate : this.recordValue.HotWater.hotWaterDate
+    let betweenDate = (this.recordValue.Electric.electricDate ?? []).length > (this.recordValue.ColdWater.coldWaterDate ?? []).length ? this.recordValue.Electric.electricDate : this.recordValue.ColdWater.coldWaterDate
+    this.option.xAxis[0].data = (betweenDate ?? []).length > (this.recordValue.HotWater.hotWaterDate ?? []).length ? (betweenDate ?? []) : (this.recordValue.HotWater.hotWaterDate ?? [])
     const myChart = echarts.init(document.getElementById('chart'), null, {
       renderer: 'canvas',
       useDirtyRect: false
     });
     // 处理三者数据
-    this.option.series[0].data = this.recordValue.Electric.electricInfo.map(function (value) {
+    this.option.series[0].data = (this.recordValue.Electric.electricInfo ?? []).map(function (value) {
       return value.toFixed(2)
     })
-    this.option.series[1].data = this.recordValue.ColdWater.coldWaterInfo.map(function (value) {
+    this.option.series[1].data = (this.recordValue.ColdWater.coldWaterInfo ?? []).map(function (value) {
       return value.toFixed(2)
     })
-    this.option.series[2].data = this.recordValue.HotWater.hotWaterInfo.map(function (value) {
+    this.option.series[2].data = (this.recordValue.HotWater.hotWaterInfo ?? []).map(function (value) {
       return value.toFixed(2)
     })
-    this.option.series[0].data ??= Array(this.option.xAxis[0].data.length).fill(0)
-    this.option.series[1].data ??= Array(this.option.xAxis[0].data.length).fill(0)
-    this.option.series[2].data ??= Array(this.option.xAxis[0].data.length).fill(0)
+    this.option.series[0].data =  this.option.series[0].data.length === 0 ? Array(this.option.xAxis[0].data.length).fill(0) : this.option.series[0].data
+    this.option.series[1].data =  this.option.series[1].data.length === 0 ? Array(this.option.xAxis[0].data.length).fill(0) : this.option.series[1].data
+    this.option.series[2].data =  this.option.series[2].data.length === 0 ? Array(this.option.xAxis[0].data.length).fill(0) : this.option.series[2].data
     myChart.setOption(this.option);
     window.onresize = function() {
       myChart.resize();
