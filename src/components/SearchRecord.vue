@@ -163,6 +163,9 @@ export default {
     this.option.series[2].data = this.recordValue.HotWater.hotWaterInfo.map(function (value) {
       return value.toFixed(2)
     })
+    this.option.series[0].data ??= Array(this.option.xAxis[0].data.length).fill(0)
+    this.option.series[1].data ??= Array(this.option.xAxis[0].data.length).fill(0)
+    this.option.series[2].data ??= Array(this.option.xAxis[0].data.length).fill(0)
     this.option.series[0].data.reverse()
     this.option.series[1].data.reverse()
     this.option.series[2].data.reverse()
