@@ -34,8 +34,8 @@
                       <span>{{status ? "   已连接" : "   已宕机"}}</span>
                     </div>
                   </div>
-                  <div class="position-absolute w-100 start-0 bg-danger shadow-sm bg-white rounded " style="height:45%;top: 10%">
-                    <div class="container position-absolute top-50 start-50 translate-middle">
+                  <div class="position-absolute w-100 start-0 shadow-sm bg-white rounded d-flex justify-content-center flex-column overflow-hidden" style="height:45%;top: 10%">
+                    <div class="container">
                       <div class="row">
                         <div class="col-6">
                           <default-info-card
@@ -56,8 +56,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="position-absolute w-100 start-0 bg-default shadow-sm bg-white rounded" style="height:40%;top: 57%">
-                    <div class="position-absolute top-50 start-0" style="transform: translateY(-50%)">
+                  <div class="position-absolute w-100 start-0 shadow-sm bg-white rounded d-flex justify-content-center flex-column overflow-hidden" style="height:40%;top: 57%">
+                    <div>
                       <p v-for="(item, index) in pInfo" :key="index" :class="item.flag ? pClass[1] : pClass[0]">{{"● " + item.msg}}</p>
                     </div>
                   </div>
@@ -98,11 +98,11 @@ export default {
       },
       pInfo: [
         {msg: `“宿舍能耗查询系统”只能校园网内才能访问。`, flag: false},
-        {msg: `本服务使用了开源工具 frp 进行内网穿透，提供了公网的使用的可能性。`, flag: false},
+        {msg: `本服务使用了 frp 进行内网穿透，提供了公网的使用的可能性。`, flag: false},
         {msg: `本服务不会收集任何个人信息，只是提供一个中转类的服务。`, flag: false},
         {msg: `服务QPS限制为50次/s；每个IP为100次/h，同时存在黑白名单。`, flag: true},
         {msg: `查询后余额结果缓存时效为6小时；查询后消费记录缓存时效为1天。`, flag: true},
-        {msg: `本项目遵循 MIT license 开源协议，请注明来源并同时遵循相关协议。`, flag: false},
+        {msg: `本项目遵循 MIT license 协议，请注明来源并同时遵循相关协议。`, flag: false},
         {msg: `本项目的最后解释权由本人（HengY1）所有。`, flag: false}
       ],
       pClass: [

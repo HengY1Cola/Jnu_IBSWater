@@ -146,21 +146,25 @@ export default {
     }
   },
   mounted() {
+    // 先处理数据为有效值
+    let electricDate = this.recordValue.Electric.electricDate ?? []
+    let coldWaterDate = this.recordValue.ColdWater.coldWaterDate ?? []
+    let hotWaterDate = this.recordValue.HotWater.hotWaterDate ?? []
     // 处理x轴
-    let betweenDate = (this.recordValue.Electric.electricDate ?? []).length > (this.recordValue.ColdWater.coldWaterDate ?? []).length ? this.recordValue.Electric.electricDate : this.recordValue.ColdWater.coldWaterDate
-    this.option.xAxis[0].data = (betweenDate ?? []).length > (this.recordValue.HotWater.hotWaterDate ?? []).length ? (betweenDate ?? []) : (this.recordValue.HotWater.hotWaterDate ?? [])
+    let betweenDate = electricDate.length > coldWaterDate.length ? electricDate : coldWaterDate
+    this.option.xAxis[0].data = betweenDate.length > hotWaterDate.length ? betweenDate : hotWaterDate
     const myChart = echarts.init(document.getElementById('chart'), null, {
       renderer: 'canvas',
       useDirtyRect: false
     });
     // 处理三者数据
-    this.option.series[0].data = (this.recordValue.Electric.electricInfo ?? []).map(function (value) {
+    this.option.series[0].data = electricDate.map(function (value) {
       return value.toFixed(2)
     })
-    this.option.series[1].data = (this.recordValue.ColdWater.coldWaterInfo ?? []).map(function (value) {
+    this.option.series[1].data = coldWaterDate.map(function (value) {
       return value.toFixed(2)
     })
-    this.option.series[2].data = (this.recordValue.HotWater.hotWaterInfo ?? []).map(function (value) {
+    this.option.series[2].data = hotWaterDate.map(function (value) {
       return value.toFixed(2)
     })
     this.option.series[0].data =  this.option.series[0].data.length === 0 ? Array(this.option.xAxis[0].data.length).fill(0) : this.option.series[0].data

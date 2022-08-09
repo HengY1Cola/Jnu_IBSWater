@@ -133,7 +133,7 @@ export default {
             this.urlAim = axios.defaults.baseURL + "/IBSJnuWeb/status/" + dormitory
           }).catch(err => {
             Swal.fire({
-              title: '网络错误',
+              title: '发生错误',
               text: `错误原因：${err.errmsg.substring(0, 8) + (8 < err.errmsg.length ? "..." : "")}`,
               icon: 'error',
               confirmButtonText: '关闭'
