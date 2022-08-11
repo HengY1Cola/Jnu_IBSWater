@@ -157,14 +157,17 @@ export default {
       renderer: 'canvas',
       useDirtyRect: false
     });
+    let electricInfo = this.recordValue.Electric.electricInfo ?? []
+    let coldWaterInfo = this.recordValue.ColdWater.coldWaterInfo ?? []
+    let hotWaterInfo = this.recordValue.HotWater.hotWaterInfo ?? []
     // 处理三者数据
-    this.option.series[0].data = electricDate.map(function (value) {
+    this.option.series[0].data = electricInfo.map(function (value) {
       return value.toFixed(2)
     })
-    this.option.series[1].data = coldWaterDate.map(function (value) {
+    this.option.series[1].data = coldWaterInfo.map(function (value) {
       return value.toFixed(2)
     })
-    this.option.series[2].data = hotWaterDate.map(function (value) {
+    this.option.series[2].data = hotWaterInfo.map(function (value) {
       return value.toFixed(2)
     })
     this.option.series[0].data =  this.option.series[0].data.length === 0 ? Array(this.option.xAxis[0].data.length).fill(0) : this.option.series[0].data
