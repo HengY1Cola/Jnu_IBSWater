@@ -2,6 +2,22 @@
   <main class="mt-0 main-content">
     <section>
       <div class="page-header min-vh-100">
+        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-backdrop="static">
+          <div class="modal-dialog modal-dialog-centered" style="width: 360px; margin: 0 auto">
+            <div class="modal-content">
+              <div class="modal-body">
+                <go-captcha
+                  :max-dot="captcha.maxDot"
+                  :image-base64="captcha.imageBase64"
+                  :thumb-base64="captcha.thumbBase64"
+                  @close="handleCloseEvent"
+                  @refresh="handleRefreshEvent"
+                  @confirm="handleConfirmEvent"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="container">
           <div class="row">
             <div class="mx-auto col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0">
@@ -33,7 +49,7 @@
                       <div class="col-4">
                         <argon-button
                             class="mt-1" variant="gradient" color="secondary" size="md"
-                            @click.prevent="showValidate" :disabled="isSend.inWait"
+                            @click.prevent="handleShowEvent" :disabled="isSend.inWait"
                         > {{isSend.msg}} </argon-button>
                       </div>
                     </div>
@@ -73,10 +89,13 @@
 
 <script>
 import ArgonButton from "@/argon_components/ArgonButton.vue";
-import bgImg from "@/assets/img/notice.png"
-import { getCode,insertOrUpdate } from "@/request/api"
+import GoCaptcha from "@/components/GoCaptcha";
+import bgImg from "@/assets/img/notice.png";
+import { getCaptcha, getCode, insertOrUpdate } from "@/request/api";
+import Swal from "sweetalert2";
+import { Modal } from "bootstrap";
+
 const body = document.getElementsByTagName("body")[0];
-import Swal from 'sweetalert2'
 
 export default {
   name: "sms",
@@ -87,7 +106,13 @@ export default {
         inWait: false,
         msg: "发送"
       },
-      token: "",
+      captcha: {
+        init: true,
+        maxDot: 5,
+        key: '',
+        imageBase64: '',
+        thumbBase64: '',
+      },
       inputClassDormitoryFlag: false,
       inputClassCodeFlag: false,
       inputClassTelFlag: false,
@@ -99,11 +124,12 @@ export default {
           `即时若你绑定的余额小于 30元 会收到短信通知。`,
           `为了减少成本开销，每天通知的频率定在 1次/天，敬请谅解。`,
           `本项目由个人运营，费用自己买单，长期稳定免费供大家使用。`
-      ]
+      ],
     }
   },
   components: {
     ArgonButton,
+    GoCaptcha,
   },
   watch: {
     inputDormitory: function () {
@@ -120,11 +146,6 @@ export default {
     }
   },
   methods: {
-    showValidate: function () {
-     if (!this.inputClassDormitoryFlag || !this.inputClassTelFlag) return
-     this.captchaIns.refresh()
-     this.captchaIns && this.captchaIns.verify()
-    },
     smsDoMission: function (){
       if (!this.inputClassDormitoryFlag || !this.inputClassCodeFlag || !this.inputTel) return
       const data = {
@@ -151,60 +172,80 @@ export default {
           confirmButtonText: '关闭'
         })
       })
+    },
+    handleShowEvent: function() {
+      if (!this.inputClassDormitoryFlag || !this.inputClassTelFlag) return
+      if (!this.captcha.init || this.captcha.key === '') this.doRefresh() // 刷新下验证码
+      this.captcha.init = false
+      this.myModal.show()
+    },
+    handleCloseEvent: function() {
+      this.myModal.hide()
+    },
+    handleRefreshEvent: function() {
+      this.$emit('refresh')
+      this.doRefresh()
+    },
+    handleConfirmEvent: function(data) {
+      this.$emit('confirm', data)
+      if (data.length <= 0) {
+        this.doRefresh()
+      }
+      let dotArr = []
+      data.forEach(function(elem){
+        dotArr.push(elem.x - 10, elem.y + 30)
+      })
+      const params = {
+        validate: dotArr,
+        tel: this.inputTel,
+        key: this.captcha.key
+      }
+      getCode(params).then(res => {
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: res.data.Tips,
+          showConfirmButton: false,
+          timer: 1500
+        })
+        this.myModal.hide()
+        this.remain = 60
+        this.isSend.inWait = true
+        this.interval = setInterval(function (e) {
+          e.remain = e.remain - 1
+          e.isSend.msg = `${e.remain}s`
+        }, 1000, this)
+        this.timeout = setTimeout(() => {
+          clearInterval(this.interval)
+          this.isSend.inWait = false
+          this.isSend.msg = "获取"
+        }, 1000 * 60);
+      }).catch(err => {
+        Swal.fire({
+          title: '错误原因',
+          text: `${err.errmsg.substring(0, 8) + (8 < err.errmsg.length ? "..." : "")}`,
+          icon: 'error',
+          confirmButtonText: '关闭'
+        })
+        this.doRefresh()
+      })
+    },
+    doRefresh: function() {
+      getCaptcha().then(res => {
+        this.captcha.key = res.data.key_index
+        this.captcha.imageBase64 = res.data.image_base64
+        this.captcha.thumbBase64 = res.data.thumb_base64
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
   created() {
     body.classList.remove("bg-gray-100");
   },
   mounted() {
-    let e = this;
-    // eslint-disable-next-line no-undef
-    initNECaptcha({ // 使用的是CDN下的，这里不进行eslint检测
-      captchaId: '005a85fde0624883b90bbe226dd0d730',
-      element: '#captcha',
-      mode: 'popup',
-      apiVersion: 2,
-      width: '320px',
-      onVerify: function (err, data) {
-        if (err) return
-        e.isSend.inWait = true
-        e.remain = 60
-        e.isSend.msg = `${e.remain}s`
-        const params = {
-          validate: data.validate,
-          tel: e.inputTel
-        }
-        getCode(params).then(res => {
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: res.data.Tips,
-            showConfirmButton: false,
-            timer: 1500
-          })
-        }).catch(err => {
-          Swal.fire({
-            title: '网络不对劲',
-            text: `错误原因：${err.errmsg.substring(0, 8) + (8 < err.errmsg.length ? "..." : "")}`,
-            icon: 'error',
-            confirmButtonText: '关闭'
-          })
-        })
-        let interval = setInterval(function (e) {
-          e.remain = e.remain - 1
-          e.isSend.msg = `${e.remain}s`
-        }, 1000, e)
-        e.timeout = setTimeout(() => {
-          clearInterval(interval)
-          e.isSend.inWait = false
-          e.isSend.msg = "获取"
-        }, 1000 * 60);
-      }
-    }, function onload(instance) {
-      e.captchaIns = instance;
-    }, function onerror() {
-      console.log("Y1dun err load")
-    })
+    this.myModal = new Modal(document.getElementById('myModal'))
+    this.doRefresh()
   },
   beforeUnmount() {
     clearInterval(this.timeout)
